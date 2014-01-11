@@ -1,6 +1,6 @@
 package XML::Parser::ClinicalTrials::Study::Facility;
 {
-  $XML::Parser::ClinicalTrials::Study::Facility::VERSION = '1.20131113';
+  $XML::Parser::ClinicalTrials::Study::Facility::VERSION = '1.20140111';
 }
 
 use strict;

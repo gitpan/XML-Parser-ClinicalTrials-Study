@@ -31,37 +31,29 @@ my %WriteMakefileArgs = (
     "File::Slurp" => 0,
     "Test::Most" => 0
   },
-  "VERSION" => "1.20131113",
+  "VERSION" => "1.20140111",
   "test" => {
     "TESTS" => "t/*.t"
   }
 );
 
 
-unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
-  my $tr = delete $WriteMakefileArgs{TEST_REQUIRES};
-  my $br = $WriteMakefileArgs{BUILD_REQUIRES};
-  for my $mod ( keys %$tr ) {
-    if ( exists $br->{$mod} ) {
-      $br->{$mod} = $tr->{$mod} if $tr->{$mod} > $br->{$mod};
-    }
-    else {
-      $br->{$mod} = $tr->{$mod};
-    }
-  }
-}
+my %FallbackPrereqs = (
+  "DateTime::Format::Natural" => 0,
+  "File::Slurp" => 0,
+  "Test::Most" => 0,
+  "XML::Rabbit" => 0,
+  "XML::Rabbit::Root" => 0,
+  "constant" => 0,
+  "strict" => 0,
+  "warnings" => 0
+);
 
-unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
-  my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
-  my $pp = $WriteMakefileArgs{PREREQ_PM};
-  for my $mod ( keys %$br ) {
-    if ( exists $pp->{$mod} ) {
-      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod};
-    }
-    else {
-      $pp->{$mod} = $br->{$mod};
-    }
-  }
+
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
+  delete $WriteMakefileArgs{TEST_REQUIRES};
+  delete $WriteMakefileArgs{BUILD_REQUIRES};
+  $WriteMakefileArgs{PREREQ_PM} = \%FallbackPrereqs;
 }
 
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
